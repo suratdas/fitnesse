@@ -1,0 +1,7 @@
+<h2>Commit $pageName?</h2>
+<form method="POST">
+ <p>Are you sure you want to commit $pageName?</p>
+ #if( $commitSubPages )<p class="warning">Warning, this page contains one or more subpages.</p>#end
+ <input type="submit" name="confirmed" value="Yes"/>
+ <a class="button" href="$pageName" accesskey="n">No</a>
+</form>

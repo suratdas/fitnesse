@@ -1,6 +1,7 @@
 #macro( checked $attr )#if( $pageData.hasAttribute($attr) ) checked="checked"#end#end
 #macro( value $prop ) value="#escape($!{pageData.getAttribute( $prop )})"#end
  <p>$lastModified</p>
+ <p>$approver</p>
  <form method="post">
   <input type="hidden" name="responder" value="saveProperties"/>
 

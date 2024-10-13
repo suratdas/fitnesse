@@ -14,6 +14,8 @@ import java.util.*;
 public class WikiPageProperty implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  public static final String COMMITTED = "Committed";
+  public static final String APPROVER = "Approver";
   public static final String LAST_MODIFIED = "LastModified";
   public static final String LAST_MODIFYING_USER = "LastModifyingUser";
   public static final String HELP = "Help";

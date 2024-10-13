@@ -342,3 +342,11 @@ span.error {
     display: inline-block;
     padding: 0;
 }
+
+.unapproved{
+  color: Chocolate;
+}
+
+.uncommitted{
+  background-color: FloralWhite;
+}

@@ -43,6 +43,10 @@
             #if( $actions.withVersions )
                 <li#group(1)><a href="$localPath?versions" accesskey="v">Versions</a></li>
             #end
+            #if( $request.getAuthorizationUsername() )
+                <li><a href="$localPath?approve">Approve</a></li>
+                <li><a href="$localPath?commit">Commit</a></li>
+            #end
             #if( $actions.withRefactor )
                 <li#group(2)><a href="$localPath?refactor&amp;type=rename">Rename</a></li>
                 <li><a href="$localPath?refactor&amp;type=move">Move</a></li>

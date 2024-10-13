@@ -78,6 +78,8 @@ public class SaveResponder implements SecureResponder {
   }
 
   private void setData(final PageData data, final String savedContent, final String helpText, final String suites, String user) {
+    data.setAttribute(PageData.PropertyApprover, "Unapproved");
+    data.setAttribute(PageData.PropertyCommitted, "false");
     data.setContent(savedContent);
     data.setOrRemoveAttribute(PageData.PropertyHELP, helpText);
     data.setOrRemoveAttribute(PageData.PropertySUITES, suites);

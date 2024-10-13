@@ -13,6 +13,8 @@ public class PageData implements ReadOnlyPageData, Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  public static final String PropertyCommitted = WikiPageProperty.COMMITTED;
+  public static final String PropertyApprover = WikiPageProperty.APPROVER;
   @Deprecated
   public static final String PropertyLAST_MODIFIED = WikiPageProperty.LAST_MODIFIED;
   @Deprecated
@@ -43,7 +45,7 @@ public class PageData implements ReadOnlyPageData, Serializable {
    * To simplify writing test cases the below is defined
    */
   public static final String PAGE_LINE_SEPARATOR ="\n";
-  
+
   public static final String PAGE_TYPE_ATTRIBUTE = "PageType";
   public static final String[] PAGE_TYPE_ATTRIBUTES = { STATIC.toString(),
       TEST.toString(), SUITE.toString() };

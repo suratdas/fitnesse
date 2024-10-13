@@ -40,6 +40,7 @@ import static fitnesse.wiki.PageData.PAGE_TYPE_ATTRIBUTES;
 import static fitnesse.wiki.PageData.SECURITY_ATTRIBUTES;
 import static fitnesse.wiki.PageType.SUITE;
 import static fitnesse.wiki.PageType.TEST;
+import static fitnesse.wiki.WikiPageProperty.APPROVER;
 import static fitnesse.wiki.WikiPageProperty.EDIT;
 import static fitnesse.wiki.WikiPageProperty.FILES;
 import static fitnesse.wiki.WikiPageProperty.HELP;
@@ -95,11 +96,11 @@ public class PropertiesResponder implements SecureResponder {
   private JSONObject makeJson() {
     response.setContentType(Response.Format.JSON);
     JSONObject jsonObject = new JSONObject();
-    String[] attributes = { TEST.toString(), SEARCH,
-        EDIT, PROPERTIES, VERSIONS, REFACTOR,
-        WHERE_USED, RECENT_CHANGES, SUITE.toString(),
-        PRUNE, SECURE_READ, SECURE_WRITE,
-        SECURE_TEST, FILES };
+    String[] attributes = {TEST.toString(), SEARCH,
+      EDIT, PROPERTIES, VERSIONS, REFACTOR,
+      WHERE_USED, RECENT_CHANGES, SUITE.toString(),
+      PRUNE, SECURE_READ, SECURE_WRITE,
+      SECURE_TEST, FILES};
     for (String attribute : attributes)
       addJsonAttribute(jsonObject, attribute);
     if (pageData.hasAttribute(HELP)) {
@@ -107,7 +108,7 @@ public class PropertiesResponder implements SecureResponder {
     }
     if (pageData.hasAttribute(SUITES)) {
       JSONArray tags = new JSONArray();
-      for(String tag : pageData.getAttribute(SUITES).split(",")) {
+      for (String tag : pageData.getAttribute(SUITES).split(",")) {
         if (StringUtils.isNotBlank(tag)) {
           tags.put(tag.trim());
         }
@@ -128,7 +129,7 @@ public class PropertiesResponder implements SecureResponder {
     html.setTitle("Properties: " + resource);
 
     String tags = "";
-    if(pageData != null)  {
+    if (pageData != null) {
       tags = pageData.getAttribute(SUITES);
     }
 
@@ -136,6 +137,7 @@ public class PropertiesResponder implements SecureResponder {
     html.put("pageData", pageData);
     html.setMainTemplate("propertiesPage");
     makeLastModifiedTag();
+    makeApproverTag();
     makeFormSections();
 
     return html.html(request);
@@ -144,29 +146,36 @@ public class PropertiesResponder implements SecureResponder {
   private void makeLastModifiedTag() {
     String username = pageData.getAttribute(LAST_MODIFYING_USER);
     String dateString = pageData.getAttribute(LAST_MODIFIED);
-  if (dateString == null) dateString ="";
-  if (!dateString.isEmpty()){
-    try {
-      Date date = WikiPageProperty.getTimeFormat().parse(dateString);
-      dateString = " on " + new SimpleDateFormat("MMM dd, yyyy").format(date) + " at " + new SimpleDateFormat("hh:mm:ss a").format(date);
+    if (dateString == null) dateString = "";
+    if (!dateString.isEmpty()) {
+      try {
+        Date date = WikiPageProperty.getTimeFormat().parse(dateString);
+        dateString = " on " + new SimpleDateFormat("MMM dd, yyyy").format(date) + " at " + new SimpleDateFormat("hh:mm:ss a").format(date);
+      } catch (ParseException e) {
+        dateString = " on " + dateString;
+      }
     }
-    catch (ParseException e) {
-      dateString = " on " + dateString;
-    }
-  }
 
     if (username == null || "".equals(username))
       html.put("lastModified", "Last modified anonymously" + dateString);
     else
-      html.put("lastModified", "Last modified by " + username + dateString) ;
+      html.put("lastModified", "Last modified by " + username + dateString);
 
+  }
+
+  private void makeApproverTag() {
+    String approver = pageData.getAttribute(APPROVER);
+    String textForApprover = (!approver.isEmpty() && !approver.equals("Unapproved"))
+      ? "Page approved by : " + approver
+      : "Page modifications not approved yet.";
+    html.put("approver", textForApprover);
   }
 
   private void makeFormSections() {
     makePropertiesForm();
 
     WikiImportProperty importProperty = WikiImportProperty.createFrom(pageData
-        .getProperties());
+      .getProperties());
     if (importProperty != null)
       makeImportUpdateForm(importProperty);
     else
@@ -213,7 +222,7 @@ public class PropertiesResponder implements SecureResponder {
 
   private void makeSymbolicLinkSection() {
     WikiPageProperty symLinksProperty = pageData.getProperties().getProperty(
-        SymbolicPage.PROPERTY_NAME);
+      SymbolicPage.PROPERTY_NAME);
     if (symLinksProperty == null)
       return;
     List<Symlink> symlinks = new ArrayList<>();

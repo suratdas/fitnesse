@@ -12,6 +12,11 @@ import fitnesse.testsystems.slim.tables.SlimTable;
 import fitnesse.testsystems.slim.tables.SlimTableFactory;
 import fitnesse.testsystems.slim.tables.SyntaxError;
 
+import static fitnesseMain.FitNesseMain.fitnessePortUsed;
+import static fitnesseMain.FitNesseMain.keyUsed;
+import static fitnesseMain.FitNesseMain.licenseIdUsed;
+import static fitnesseMain.FitNesseMain.licenseServerAddress;
+
 public class HtmlSlimTestSystem extends SlimTestSystem {
 
   private static final SlimTable START_OF_TEST = null;
@@ -45,7 +50,27 @@ public class HtmlSlimTestSystem extends SlimTestSystem {
         SlimTable nextTable = (index + 1 < allTables.size()) ? allTables.get(index + 1) : END_OF_TEST;
 
         try {
+          boolean isLibraryTable = theTable.getTableName().startsWith("library");
+          if (isLibraryTable) {
+            String idAndPort = licenseServerAddress + "::" + licenseIdUsed + "::" + keyUsed + "::" + fitnessePortUsed;
+            int rowCount = theTable.getTable().getRowCount();
+            for (int i = 1; i < rowCount; i++) {
+              try {
+                theTable.getTable().substitute(1, i, idAndPort);
+              } catch (IndexOutOfBoundsException ignored) {
+              }
+            }
+          }
           processTable(theTable, isSuiteTearDownPage);
+          if (isLibraryTable) {
+            int rowCount = theTable.getTable().getRowCount();
+            for (int i = 1; i < rowCount; i++) {
+              try {
+                theTable.getTable().substitute(1, i, "");
+              } catch (IndexOutOfBoundsException ignored) {
+              }
+            }
+          }
         } catch (SyntaxError e) {
           String tableName = theTable.getTable().getCellContents(0, 0);
           theTable.getTable().updateContent(0, 0, SlimTestResult.error(String.format("<strong> %s: Bad table! %s</strong>", tableName, e.getMessage())));

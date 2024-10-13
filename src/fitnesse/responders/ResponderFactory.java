@@ -69,6 +69,8 @@ public class ResponderFactory {
     responderMap = new HashMap<>();
     addResponder("new", NewPageResponder.class);
     addResponder("edit", EditResponder.class);
+    addResponder("approve", ApproveResponder.class);
+    addResponder("commit", CommitResponder.class);
     addResponder("saveData", SaveResponder.class);
     addResponder("search", SearchResponder.class);
     addResponder("searchForm", SearchResponder.class);

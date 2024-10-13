@@ -67,6 +67,8 @@ java {
 }
 
 dependencies {
+  implementation "org.eclipse.jgit:org.eclipse.jgit:6.8.0.202311291450-r"
+  implementation "com.fasterxml.jackson.core:jackson-databind:2.16.0"
   implementation "org.htmlparser:htmlparser:2.1"
   implementation "org.htmlparser:htmllexer:2.1"
   implementation ("org.apache.velocity:velocity-engine-core:2.3") {
